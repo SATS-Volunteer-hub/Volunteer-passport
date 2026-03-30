@@ -1,0 +1,1006 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>My Volunteer Passport · SATS Volunteer Hub</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Fraunces:ital,wght@0,300;0,600;1,300;1,600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --teal: #0a7c6e;
+  --teal-light: #12a990;
+  --teal-pale: #e6f7f5;
+  --teal-mid: #c2ede8;
+  --gold: #d4a017;
+  --gold-pale: #fdf6e3;
+  --text: #1a2e2b;
+  --text-2: #3d5a55;
+  --text-3: #6b8a85;
+  --border: rgba(10,124,110,.12);
+  --white: #ffffff;
+  --bg: #f0faf8;
+  --card: #ffffff;
+  --shadow: 0 2px 20px rgba(10,124,110,.08);
+  --shadow-lg: 0 8px 40px rgba(10,124,110,.14);
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: 'Outfit', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ── LOGIN SCREEN ── */
+#login-screen {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  position: relative;
+  overflow: hidden;
+}
+
+.login-bg {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(160deg, #0a7c6e 0%, #065c52 40%, #033d36 100%);
+  z-index: 0;
+}
+
+.login-blob {
+  position: absolute;
+  border-radius: 50%;
+  opacity: .08;
+  pointer-events: none;
+}
+
+.login-card {
+  position: relative;
+  z-index: 1;
+  background: white;
+  border-radius: 24px;
+  padding: 44px 40px;
+  width: 100%;
+  max-width: 420px;
+  box-shadow: 0 24px 80px rgba(0,0,0,.25);
+}
+
+.login-logo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 32px;
+}
+
+.login-logo-icon {
+  width: 44px; height: 44px;
+  background: linear-gradient(135deg, var(--teal), var(--teal-light));
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 22px;
+}
+
+.login-logo-text h1 {
+  font-family: 'Fraunces', serif;
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--teal);
+  line-height: 1.1;
+}
+
+.login-logo-text p {
+  font-size: 11px;
+  color: var(--text-3);
+  letter-spacing: .5px;
+  text-transform: uppercase;
+}
+
+.login-heading {
+  font-family: 'Fraunces', serif;
+  font-size: 26px;
+  font-weight: 600;
+  color: var(--text);
+  margin-bottom: 6px;
+  line-height: 1.2;
+}
+
+.login-sub {
+  font-size: 14px;
+  color: var(--text-3);
+  margin-bottom: 28px;
+  line-height: 1.5;
+}
+
+.field-label {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text-2);
+  margin-bottom: 6px;
+  display: block;
+  letter-spacing: .3px;
+  text-transform: uppercase;
+}
+
+.search-wrap {
+  position: relative;
+  margin-bottom: 12px;
+}
+
+.name-input {
+  width: 100%;
+  padding: 14px 16px;
+  border: 1.5px solid var(--border);
+  border-radius: 12px;
+  font-size: 15px;
+  font-family: 'Outfit', sans-serif;
+  color: var(--text);
+  background: var(--bg);
+  transition: border-color .2s, box-shadow .2s;
+  outline: none;
+}
+
+.name-input:focus {
+  border-color: var(--teal);
+  box-shadow: 0 0 0 3px rgba(10,124,110,.1);
+  background: white;
+}
+
+.suggestions {
+  position: absolute;
+  top: calc(100% + 4px);
+  left: 0; right: 0;
+  background: white;
+  border: 1.5px solid var(--teal-mid);
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: var(--shadow-lg);
+  z-index: 10;
+  max-height: 220px;
+  overflow-y: auto;
+  display: none;
+}
+
+.suggestions.show { display: block; }
+
+.sug-item {
+  padding: 12px 16px;
+  font-size: 14px;
+  cursor: pointer;
+  transition: background .12s;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  border-bottom: 1px solid var(--border);
+}
+
+.sug-item:last-child { border-bottom: none; }
+.sug-item:hover, .sug-item.focused { background: var(--teal-pale); }
+
+.sug-avatar {
+  width: 30px; height: 30px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--teal), var(--teal-light));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+  font-weight: 600;
+  color: white;
+  flex-shrink: 0;
+}
+
+.sug-name { font-weight: 500; color: var(--text); }
+.sug-bu { font-size: 11px; color: var(--text-3); }
+
+.login-btn {
+  width: 100%;
+  padding: 15px;
+  background: linear-gradient(135deg, var(--teal), var(--teal-light));
+  color: white;
+  border: none;
+  border-radius: 12px;
+  font-size: 15px;
+  font-weight: 600;
+  font-family: 'Outfit', sans-serif;
+  cursor: pointer;
+  transition: opacity .15s, transform .1s;
+  margin-top: 4px;
+}
+
+.login-btn:hover { opacity: .92; }
+.login-btn:active { transform: scale(.98); }
+
+.login-note {
+  margin-top: 20px;
+  font-size: 12px;
+  color: var(--text-3);
+  text-align: center;
+  line-height: 1.6;
+  display: flex;
+  align-items: flex-start;
+  gap: 6px;
+}
+
+.login-error {
+  background: #fff0f0;
+  border: 1px solid #fcc;
+  color: #c0392b;
+  padding: 10px 14px;
+  border-radius: 8px;
+  font-size: 13px;
+  margin-bottom: 12px;
+  display: none;
+}
+
+/* ── PASSPORT SCREEN ── */
+#passport-screen { display: none; min-height: 100vh; }
+
+/* Header */
+.passport-header {
+  background: linear-gradient(150deg, #0a7c6e 0%, #065c52 60%, #044840 100%);
+  padding: 0 0 32px;
+  position: relative;
+  overflow: hidden;
+}
+
+.passport-header::before {
+  content: '';
+  position: absolute;
+  top: -60px; right: -60px;
+  width: 240px; height: 240px;
+  border-radius: 50%;
+  background: rgba(255,255,255,.04);
+}
+
+.passport-header::after {
+  content: '';
+  position: absolute;
+  bottom: -80px; left: -40px;
+  width: 200px; height: 200px;
+  border-radius: 50%;
+  background: rgba(255,255,255,.03);
+}
+
+.passport-topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 18px 24px 0;
+  position: relative;
+  z-index: 1;
+}
+
+.passport-topbar-logo {
+  font-family: 'Fraunces', serif;
+  font-size: 14px;
+  color: rgba(255,255,255,.7);
+  font-style: italic;
+}
+
+.logout-btn {
+  background: rgba(255,255,255,.12);
+  border: 1px solid rgba(255,255,255,.2);
+  color: rgba(255,255,255,.85);
+  padding: 6px 14px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-family: 'Outfit', sans-serif;
+  cursor: pointer;
+  transition: background .15s;
+}
+
+.logout-btn:hover { background: rgba(255,255,255,.2); }
+
+.passport-hero {
+  padding: 28px 24px 0;
+  position: relative;
+  z-index: 1;
+}
+
+.passport-year-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: rgba(255,255,255,.12);
+  border: 1px solid rgba(255,255,255,.2);
+  color: rgba(255,255,255,.9);
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: .5px;
+  text-transform: uppercase;
+  margin-bottom: 16px;
+}
+
+.passport-name {
+  font-family: 'Fraunces', serif;
+  font-size: clamp(28px, 6vw, 38px);
+  font-weight: 600;
+  color: white;
+  line-height: 1.1;
+  margin-bottom: 6px;
+}
+
+.passport-bu {
+  font-size: 14px;
+  color: rgba(255,255,255,.65);
+  margin-bottom: 28px;
+}
+
+/* Hero stats strip */
+.hero-stats {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+  padding: 0 24px;
+  position: relative;
+  z-index: 1;
+}
+
+.hero-stat {
+  background: rgba(255,255,255,.1);
+  border: 1px solid rgba(255,255,255,.15);
+  border-radius: 16px;
+  padding: 16px 14px;
+  text-align: center;
+  backdrop-filter: blur(8px);
+}
+
+.hero-stat-val {
+  font-family: 'Fraunces', serif;
+  font-size: 28px;
+  font-weight: 600;
+  color: white;
+  line-height: 1;
+  margin-bottom: 4px;
+}
+
+.hero-stat-label {
+  font-size: 11px;
+  color: rgba(255,255,255,.65);
+  font-weight: 400;
+  line-height: 1.3;
+}
+
+/* ── CONTENT ── */
+.passport-content {
+  padding: 24px 20px 40px;
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+/* Section */
+.section { margin-bottom: 24px; }
+
+.section-label {
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: var(--text-3);
+  margin-bottom: 12px;
+}
+
+/* Impact card */
+.impact-card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  padding: 20px;
+  box-shadow: var(--shadow);
+  margin-bottom: 12px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  animation: fadeUp .4s ease both;
+}
+
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(12px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.impact-icon {
+  width: 52px; height: 52px;
+  border-radius: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 24px;
+  flex-shrink: 0;
+}
+
+.impact-icon.ffth   { background: #e8f5f3; }
+.impact-icon.cf     { background: #fff3e6; }
+.impact-icon.fb     { background: #e8f0ff; }
+.impact-icon.other  { background: #f5f5f5; }
+
+.impact-body { flex: 1; }
+
+.impact-activity {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text);
+  margin-bottom: 2px;
+}
+
+.impact-desc {
+  font-size: 12px;
+  color: var(--text-3);
+  margin-bottom: 8px;
+  line-height: 1.4;
+}
+
+.impact-number {
+  font-family: 'Fraunces', serif;
+  font-size: 22px;
+  font-weight: 600;
+  color: var(--teal);
+}
+
+.impact-unit { font-size: 12px; color: var(--text-3); margin-left: 4px; }
+
+/* Hours bar */
+.hours-progress {
+  margin-top: 8px;
+  height: 5px;
+  background: var(--teal-pale);
+  border-radius: 99px;
+  overflow: hidden;
+}
+
+.hours-progress-fill {
+  height: 100%;
+  border-radius: 99px;
+  background: linear-gradient(90deg, var(--teal), var(--teal-light));
+  transition: width .8s cubic-bezier(.34,1.56,.64,1);
+}
+
+/* Sessions timeline */
+.timeline { position: relative; padding-left: 20px; }
+.timeline::before {
+  content: '';
+  position: absolute;
+  left: 6px; top: 8px; bottom: 8px;
+  width: 2px;
+  background: linear-gradient(180deg, var(--teal-mid), transparent);
+  border-radius: 2px;
+}
+
+.timeline-item {
+  position: relative;
+  margin-bottom: 14px;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 14px 16px;
+  box-shadow: var(--shadow);
+  animation: fadeUp .4s ease both;
+}
+
+.timeline-item::before {
+  content: '';
+  position: absolute;
+  left: -17px; top: 18px;
+  width: 10px; height: 10px;
+  border-radius: 50%;
+  background: var(--teal);
+  border: 2px solid white;
+  box-shadow: 0 0 0 2px var(--teal-mid);
+}
+
+.tl-top {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  margin-bottom: 6px;
+}
+
+.tl-activity {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text);
+}
+
+.tl-hrs {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--teal);
+  background: var(--teal-pale);
+  padding: 2px 10px;
+  border-radius: 20px;
+  white-space: nowrap;
+}
+
+.tl-date {
+  font-size: 12px;
+  color: var(--text-3);
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.tl-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 2px 8px;
+  border-radius: 20px;
+  font-size: 10px;
+  font-weight: 600;
+  margin-left: 6px;
+}
+
+/* Rank card */
+.rank-card {
+  background: linear-gradient(135deg, var(--gold-pale), #fffbf0);
+  border: 1.5px solid rgba(212,160,23,.25);
+  border-radius: 20px;
+  padding: 20px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  box-shadow: 0 2px 16px rgba(212,160,23,.12);
+  animation: fadeUp .5s ease both;
+}
+
+.rank-medal {
+  width: 60px; height: 60px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #f6d365, #d4a017);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 28px;
+  box-shadow: 0 4px 12px rgba(212,160,23,.3);
+  flex-shrink: 0;
+}
+
+.rank-body {}
+.rank-title {
+  font-size: 12px;
+  color: #8a6a00;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: .5px;
+  margin-bottom: 4px;
+}
+
+.rank-pos {
+  font-family: 'Fraunces', serif;
+  font-size: 22px;
+  font-weight: 600;
+  color: #5a4400;
+  line-height: 1;
+  margin-bottom: 4px;
+}
+
+.rank-detail { font-size: 12px; color: #8a6a00; }
+
+/* Community impact panel */
+.community-panel {
+  background: linear-gradient(135deg, var(--teal), #065c52);
+  border-radius: 20px;
+  padding: 22px;
+  color: white;
+  position: relative;
+  overflow: hidden;
+  animation: fadeUp .4s ease both;
+}
+
+.community-panel::before {
+  content: '';
+  position: absolute;
+  top: -30px; right: -30px;
+  width: 120px; height: 120px;
+  border-radius: 50%;
+  background: rgba(255,255,255,.06);
+}
+
+.community-label {
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: .8px;
+  color: rgba(255,255,255,.65);
+  margin-bottom: 8px;
+}
+
+.community-headline {
+  font-family: 'Fraunces', serif;
+  font-size: 20px;
+  font-weight: 600;
+  color: white;
+  margin-bottom: 4px;
+  line-height: 1.3;
+}
+
+.community-sub {
+  font-size: 13px;
+  color: rgba(255,255,255,.65);
+  margin-bottom: 18px;
+  line-height: 1.5;
+}
+
+.community-stats {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 10px;
+}
+
+.cs-item {
+  background: rgba(255,255,255,.1);
+  border-radius: 12px;
+  padding: 12px 10px;
+  text-align: center;
+}
+
+.cs-val {
+  font-family: 'Fraunces', serif;
+  font-size: 20px;
+  font-weight: 600;
+  color: white;
+}
+
+.cs-label {
+  font-size: 10px;
+  color: rgba(255,255,255,.6);
+  line-height: 1.3;
+  margin-top: 2px;
+}
+
+/* Empty state */
+.empty-passport {
+  text-align: center;
+  padding: 48px 24px;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 20px;
+}
+
+.empty-passport-icon { font-size: 48px; margin-bottom: 12px; }
+.empty-passport-title { font-size: 17px; font-weight: 600; color: var(--text); margin-bottom: 6px; }
+.empty-passport-sub { font-size: 14px; color: var(--text-3); line-height: 1.5; }
+
+/* Share / download banner */
+.share-banner {
+  background: var(--teal-pale);
+  border: 1px solid var(--teal-mid);
+  border-radius: 14px;
+  padding: 14px 18px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-top: 8px;
+  animation: fadeUp .5s ease both;
+}
+
+.share-text { flex: 1; font-size: 13px; color: var(--teal); line-height: 1.4; }
+.share-text strong { font-weight: 600; }
+
+@media (max-width: 400px) {
+  .hero-stats { grid-template-columns: repeat(3,1fr); gap: 8px; }
+  .hero-stat-val { font-size: 22px; }
+  .login-card { padding: 32px 24px; }
+  .community-stats { grid-template-columns: 1fr 1fr 1fr; }
+}
+</style>
+</head>
+<body>
+
+<!-- ═══════════════ LOGIN ═══════════════ -->
+<div id="login-screen">
+  <div class="login-bg"></div>
+  <!-- decorative blobs -->
+  <div class="login-blob" style="width:300px;height:300px;background:rgba(255,255,255,1);top:-80px;right:-80px"></div>
+  <div class="login-blob" style="width:200px;height:200px;background:rgba(255,255,255,1);bottom:-60px;left:-40px"></div>
+
+  <div class="login-card">
+    <div class="login-logo">
+      <div class="login-logo-icon">🌿</div>
+      <div class="login-logo-text">
+        <h1>Volunteer Hub</h1>
+        <p>SATS Staff Association</p>
+      </div>
+    </div>
+
+    <h2 class="login-heading">Your Volunteer Passport</h2>
+    <p class="login-sub">See the hours you've given and the lives you've touched. Type your name to view your personal impact.</p>
+
+    <div id="login-error" class="login-error">Name not found. Please check your spelling or contact SSA.</div>
+
+    <label class="field-label">Your Full Name</label>
+    <div class="search-wrap">
+      <input type="text" class="name-input" id="name-input"
+        placeholder="e.g. Ong Lai Hoe"
+        autocomplete="off"
+        oninput="onNameInput(this.value)"
+        onkeydown="onKeyDown(event)">
+      <div class="suggestions" id="suggestions"></div>
+    </div>
+
+    <button class="login-btn" onclick="doLogin()">View My Passport →</button>
+
+    <div class="login-note">
+      🔒 Your passport shows only your own records. No one else can see your data.
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════ PASSPORT ═══════════════ -->
+<div id="passport-screen">
+  <div class="passport-header">
+    <div class="passport-topbar">
+      <span class="passport-topbar-logo">SATS Volunteer Hub</span>
+      <button class="logout-btn" onclick="doLogout()">← Back</button>
+    </div>
+    <div class="passport-hero">
+      <div class="passport-year-badge">✦ 2026 Volunteer Passport</div>
+      <div class="passport-name" id="pp-name">—</div>
+      <div class="passport-bu" id="pp-bu">—</div>
+    </div>
+    <div class="hero-stats">
+      <div class="hero-stat">
+        <div class="hero-stat-val" id="pp-hours">0</div>
+        <div class="hero-stat-label">Volunteer Hours</div>
+      </div>
+      <div class="hero-stat">
+        <div class="hero-stat-val" id="pp-sessions">0</div>
+        <div class="hero-stat-label">Sessions Attended</div>
+      </div>
+      <div class="hero-stat">
+        <div class="hero-stat-val" id="pp-activities">0</div>
+        <div class="hero-stat-label">Activities</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="passport-content">
+
+    <!-- RANK -->
+    <div class="section">
+      <div class="section-label">Your Standing</div>
+      <div class="rank-card" id="rank-card">
+        <div class="rank-medal" id="rank-medal">🏅</div>
+        <div class="rank-body">
+          <div class="rank-title">Volunteer Ranking</div>
+          <div class="rank-pos" id="rank-pos">—</div>
+          <div class="rank-detail" id="rank-detail">—</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- IMPACT -->
+    <div class="section">
+      <div class="section-label">Your Community Impact</div>
+      <div id="impact-cards"></div>
+    </div>
+
+    <!-- COMMUNITY CONTEXT -->
+    <div class="section">
+      <div class="section-label">You Are Part Of Something Bigger</div>
+      <div class="community-panel">
+        <div class="community-label">SSA Volunteer Community · 2026</div>
+        <div class="community-headline" id="pp-community-line">Together, we're making a difference</div>
+        <div class="community-sub" id="pp-community-sub">Your hours are part of a growing movement within SATS.</div>
+        <div class="community-stats">
+          <div class="cs-item"><div class="cs-val">219.5</div><div class="cs-label">Total hrs by SSA</div></div>
+          <div class="cs-item"><div class="cs-val">69</div><div class="cs-label">Volunteers</div></div>
+          <div class="cs-item"><div class="cs-val" id="pp-pct">0%</div><div class="cs-label">Your contribution</div></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- TIMELINE -->
+    <div class="section">
+      <div class="section-label">Activity History</div>
+      <div class="timeline" id="pp-timeline"></div>
+    </div>
+
+    <!-- SHARE NOTE -->
+    <div class="share-banner">
+      <span style="font-size:20px">💚</span>
+      <div class="share-text"><strong>Thank you for volunteering!</strong><br>Your dedication makes SATS a better place and our community stronger.</div>
+    </div>
+
+  </div>
+</div>
+
+<script>
+// ── DATA ──
+const ALL_RECORDS = [{"id": "V2026_0", "name": "Choo Li-Chuan Ewan", "bu": "Food Solutions", "activity": "FFTH", "hours": 2.5, "date": "2026-01-21", "email": "ewan_choo@sats.com.sg", "location": ""}, {"id": "V2026_1", "name": "Liow Lay Choo", "bu": "Food Solutions", "activity": "FFTH", "hours": 2.5, "date": "2026-01-21", "email": "Laychoo_Liow@sats.com.sg", "location": ""}, {"id": "V2026_2", "name": "Visvanathan", "bu": "SSS", "activity": "FFTH", "hours": 2.5, "date": "2026-01-21", "email": "visvanathan_p@sats.com.sg", "location": ""}, {"id": "V2026_3", "name": "Chin Hui Fun", "bu": "Finance", "activity": "FFTH", "hours": 2.5, "date": "2026-01-21", "email": "HuiFun_Chin@countryfoods.com", "location": ""}, {"id": "V2026_4", "name": "Mary Grace Nazareno", "bu": "Technology", "activity": "FFTH", "hours": 2.5, "date": "2026-01-21", "email": "MaryGrace_Nazareno@sats.com.sg", "location": ""}, {"id": "V2026_5", "name": "Lim Chieng Shiong", "bu": "Food Solutions", "activity": "FFTH", "hours": 2.5, "date": "2026-01-21", "email": "Sean_LimCS@countryfoods.com", "location": ""}, {"id": "V2026_6", "name": "Suriyanna binte Yahya", "bu": "SG Hub", "activity": "FFTH", "hours": 2.5, "date": "2026-01-21", "email": "88026483@sats.com.sg", "location": ""}, {"id": "V2026_7", "name": "Geraldine Chan", "bu": "SG Hub", "activity": "FFTH", "hours": 2.5, "date": "2026-01-21", "email": "yokesimg_chan@sats.com.sg", "location": ""}, {"id": "V2026_8", "name": "Tang Siok Heang", "bu": "SSS", "activity": "FFTH", "hours": 2.5, "date": "2026-01-21", "email": "88024944@sats.com.sg", "location": ""}, {"id": "V2026_9", "name": "KIRAN PANJABI", "bu": "SG Hub", "activity": "FFTH", "hours": 2.5, "date": "2026-01-21", "email": "88019134@sats.com.sg", "location": ""}, {"id": "V2026_10", "name": "Lau Heng Seng", "bu": "Food Solutions", "activity": "FFTH", "hours": 2.5, "date": "2026-01-21", "email": "hengseng_lau@sats.com.sg", "location": ""}, {"id": "V2026_11", "name": "AiLian Chong", "bu": "Food Solutions", "activity": "FFTH", "hours": 2.5, "date": "2026-01-21", "email": "AiLian_Chong@countryfoods.com", "location": ""}, {"id": "V2026_12", "name": "ChoonKim Cheng", "bu": "Food Solutions", "activity": "FFTH", "hours": 2.5, "date": "2026-01-21", "email": "ChoonKim_Cheng@countryfoods.com", "location": ""}, {"id": "V2026_13", "name": "Karen GuapLL", "bu": "Food Solutions", "activity": "FFTH", "hours": 2.5, "date": "2026-01-21", "email": "Karen_Guapll@countryfoods.com", "location": ""}, {"id": "V2026_14", "name": "Sharon Siew", "bu": "Human Capital", "activity": "FFTH", "hours": 2.5, "date": "2026-01-21", "email": "Sharon_siewml@sats.com.sg", "location": ""}, {"id": "V2026_15", "name": "SiewYong Chu", "bu": "Food Solutions", "activity": "FFTH", "hours": 2.5, "date": "2026-01-21", "email": "siewyong_chu@countryfoods.com", "location": ""}, {"id": "V2026_16", "name": "Ong Lai Hoe", "bu": "SG Hub", "activity": "Comchest Fudai", "hours": 4.0, "date": "2026-02-06", "email": "laihoe_ong@sats.com.sg", "location": ""}, {"id": "V2026_17", "name": "Isa Sulaiman", "bu": "SG Hub", "activity": "Comchest Fudai", "hours": 4.0, "date": "2026-02-06", "email": "Isa_Sulaiman@sats.com.sg", "location": ""}, {"id": "V2026_18", "name": "Kevin Tat Hwan Koh", "bu": "Finance", "activity": "Comchest Fudai", "hours": 4.0, "date": "2026-02-06", "email": "Kevin_KohTH@sats.com.sg", "location": ""}, {"id": "V2026_19", "name": "SiewPing Ng", "bu": "Finance", "activity": "Comchest Fudai", "hours": 4.0, "date": "2026-02-06", "email": "siewping_ng@sats.com.sg", "location": ""}, {"id": "V2026_20", "name": "Chew Siew Yen", "bu": "Finance", "activity": "Comchest Fudai", "hours": 4.0, "date": "2026-02-06", "email": "siewyen_chew@sats.com.sg", "location": ""}, {"id": "V2026_21", "name": "Caroline Chua", "bu": "Finance", "activity": "Comchest Fudai", "hours": 4.0, "date": "2026-02-06", "email": "caroline_chua@sats.com.sg", "location": ""}, {"id": "V2026_22", "name": "Aaron Gabriel Apps", "bu": "SG Hub", "activity": "Comchest Fudai", "hours": 4.0, "date": "2026-02-06", "email": "aarong_apps@sats.com.sg", "location": ""}, {"id": "V2026_23", "name": "Henni Juana Binte Bosri", "bu": "SG Hub", "activity": "Comchest Fudai", "hours": 4.0, "date": "2026-02-06", "email": "henni_juana@sats.com.sg", "location": ""}, {"id": "V2026_24", "name": "Kohlily Lim", "bu": "SG Hub", "activity": "Comchest Fudai", "hours": 4.0, "date": "2026-02-06", "email": "kohlily_lim@sats.com.sg", "location": ""}, {"id": "V2026_25", "name": "Herlina Suryani", "bu": "SG Hub", "activity": "Comchest Fudai", "hours": 4.0, "date": "2026-02-06", "email": "herlina_suryani@sats.com.sg", "location": ""}, {"id": "V2026_26", "name": "Corey Yeo", "bu": "SG Hub", "activity": "Comchest Fudai", "hours": 4.0, "date": "2026-02-06", "email": "corey_yeo@sats.com.sg", "location": ""}, {"id": "V2026_27", "name": "Laurent Low chow Wee", "bu": "SSS", "activity": "Comchest Fudai", "hours": 4.0, "date": "2026-02-06", "email": "88009829@sats.com.sg", "location": ""}, {"id": "V2026_28", "name": "Geraldine Chan", "bu": "SG Hub", "activity": "Comchest Fudai", "hours": 4.0, "date": "2026-02-06", "email": "yokesimg_chan@sats.com.sg", "location": ""}, {"id": "V2026_29", "name": "Yip Yen Sin", "bu": "SG Hub", "activity": "Comchest Fudai", "hours": 4.0, "date": "2026-02-06", "email": "yensin_yip@sats.com.sg", "location": ""}, {"id": "V2026_30", "name": "Soh Suan Heok Karen", "bu": "SG Hub", "activity": "Comchest Fudai", "hours": 4.0, "date": "2026-02-06", "email": "88023950@sats.com.sg", "location": ""}, {"id": "V2026_31", "name": "Nor Adilah Binte Din", "bu": "SG Hub", "activity": "Comchest Fudai", "hours": 4.0, "date": "2026-02-06", "email": "88028873@sats.com.sg", "location": ""}, {"id": "V2026_32", "name": "Nabesah Bee Binte Abdul Rahman", "bu": "SG Hub", "activity": "Comchest Fudai", "hours": 4.0, "date": "2026-02-06", "email": "88028873@sats.com.sg", "location": ""}, {"id": "V2026_33", "name": "Brigitte Kwek", "bu": "SG Hub", "activity": "Comchest Fudai", "hours": 4.0, "date": "2026-02-06", "email": "brigitte_kwek@sats.com.sg", "location": ""}, {"id": "V2026_34", "name": "Liow Lay Choo", "bu": "Food Solutions", "activity": "FFTH", "hours": 2.5, "date": "2026-02-11", "email": "Laychoo_Liow@sats.com.sg", "location": ""}, {"id": "V2026_35", "name": "Dogaojo Jessica De Jesus", "bu": "Marketing", "activity": "FFTH", "hours": 2.5, "date": "2026-02-11", "email": "Jessica_Dogaojo@sats.com.sg", "location": ""}, {"id": "V2026_36", "name": "Lim Chieng Shiong", "bu": "Food Solutions", "activity": "FFTH", "hours": 2.5, "date": "2026-02-11", "email": "Sean_LimCS@countryfoods.com", "location": ""}, {"id": "V2026_37", "name": "Ong Lai Hoe", "bu": "SG Hub", "activity": "FFTH", "hours": 2.5, "date": "2026-02-11", "email": "laihoe_ong@sats.com.sg", "location": ""}, {"id": "V2026_38", "name": "MaryGrace Nazareno", "bu": "Technology", "activity": "FFTH", "hours": 2.5, "date": "2026-02-11", "email": "MaryGrace_Nazareno@sats.com.sg", "location": ""}, {"id": "V2026_39", "name": "Lim Ngee Tiang Eleana", "bu": "Food Solutions", "activity": "FFTH", "hours": 2.5, "date": "2026-02-11", "email": "Eleana_LimNT@sats.com.sg", "location": ""}, {"id": "V2026_40", "name": "Pon Chee Keong, Isaac", "bu": "Food Solutions", "activity": "FFTH", "hours": 2.5, "date": "2026-02-11", "email": "Isaac_PonCK@sats.com.sg", "location": ""}, {"id": "V2026_41", "name": "Tay Venantious Linus Tay Venantious Linus", "bu": "Food Solutions", "activity": "FFTH", "hours": 2.5, "date": "2026-02-11", "email": "Linus_Tay@sats.com.sg", "location": ""}, {"id": "V2026_42", "name": "Kok Whye Chia", "bu": "Food Solutions", "activity": "FFTH", "hours": 2.5, "date": "2026-02-11", "email": "KokWhye_Chia@sats.com.sg", "location": ""}, {"id": "V2026_43", "name": "Chew Siew Yen", "bu": "Finance", "activity": "FFTH", "hours": 2.5, "date": "2026-02-11", "email": "siewyen_chew@sats.com.sg", "location": ""}, {"id": "V2026_44", "name": "Caroline Chua", "bu": "Finance", "activity": "FFTH", "hours": 2.5, "date": "2026-02-11", "email": "caroline_chua@sats.com.sg", "location": ""}, {"id": "V2026_45", "name": "Jorenia Kay Kai Lin", "bu": "Human Capital", "activity": "Food Bank", "hours": 2.5, "date": "2026-03-25", "email": "jorenia_kay@sats.com.sg", "location": ""}, {"id": "V2026_46", "name": "Tan Shihan", "bu": "Human Capital", "activity": "Food Bank", "hours": 2.5, "date": "2026-03-25", "email": "ShiHan_Tan@sats.com.sg", "location": ""}, {"id": "V2026_47", "name": "Muhammad Arif Bin Anual", "bu": "Human Capital", "activity": "Food Bank", "hours": 2.5, "date": "2026-03-25", "email": "muhdarif_anual@sats.com.sg", "location": ""}, {"id": "V2026_48", "name": "Sharon Goh Mui Gek", "bu": "Human Capital", "activity": "Food Bank", "hours": 2.5, "date": "2026-03-25", "email": "Sharon_GohMG@sats.com.sg", "location": ""}, {"id": "V2026_49", "name": "Ng Jie Min Jasmine", "bu": "Human Capital", "activity": "Food Bank", "hours": 2.5, "date": "2026-03-25", "email": "Jasmine_NgJM@sats.com.sg", "location": ""}, {"id": "V2026_50", "name": "Er Hui Jun", "bu": "Human Capital", "activity": "Food Bank", "hours": 2.5, "date": "2026-03-25", "email": "HuiJun_Er@sats.com.sg", "location": ""}, {"id": "V2026_51", "name": "Soh Yi'En", "bu": "Human Capital", "activity": "Food Bank", "hours": 2.5, "date": "2026-03-25", "email": "YiEn_Soh@sats.com.sg", "location": ""}, {"id": "V2026_52", "name": "Cedric Tay", "bu": "Human Capital", "activity": "Food Bank", "hours": 2.5, "date": "2026-03-25", "email": "Cedric_Tay@sats.com.sg", "location": ""}, {"id": "V2026_53", "name": "Cho Siew Chui", "bu": "Human Capital", "activity": "Food Bank", "hours": 2.5, "date": "2026-03-25", "email": "cynthia_cho@sats.com.sg", "location": ""}, {"id": "V2026_54", "name": "Lim Yun Lu", "bu": "Human Capital", "activity": "Food Bank", "hours": 2.5, "date": "2026-03-25", "email": "YunLu_Lim@sats.com.sg", "location": ""}, {"id": "V2026_55", "name": "Claire Chen Xiaorong", "bu": "Human Capital", "activity": "Food Bank", "hours": 2.5, "date": "2026-03-25", "email": "Claire_ChenXR@sats.com.sg", "location": ""}, {"id": "V2026_56", "name": "Yan Cong", "bu": "Human Capital", "activity": "Food Bank", "hours": 2.5, "date": "2026-03-25", "email": "Erick_Yancong@sats.com.sg", "location": ""}, {"id": "V2026_57", "name": "Lim Leng Leng Joanne", "bu": "Human Capital", "activity": "Food Bank", "hours": 2.5, "date": "2026-03-25", "email": "lengleng_lim@sats.com.sg", "location": ""}, {"id": "V2026_58", "name": "Goh Ping Yeen", "bu": "Human Capital", "activity": "Food Bank", "hours": 2.5, "date": "2026-03-25", "email": "PingYeen_Goh@sats.com.sg", "location": ""}, {"id": "V2026_59", "name": "Toh I Mee", "bu": "Human Capital", "activity": "Food Bank", "hours": 2.5, "date": "2026-03-25", "email": "IMee_Toh@sats.com.sg", "location": ""}, {"id": "V2026_60", "name": "Ng Ivy", "bu": "Human Capital", "activity": "Food Bank", "hours": 2.5, "date": "2026-03-25", "email": "Ivy_Ng@sats.com.sg", "location": ""}, {"id": "V2026_61", "name": "Lee Nget Keow (Peggy)", "bu": "Human Capital", "activity": "Food Bank", "hours": 2.5, "date": "2026-03-25", "email": "NgetKeow_Lee@sats.com.sg", "location": ""}, {"id": "V2026_62", "name": "Pantaleon Aleli Cruz", "bu": "Human Capital", "activity": "Food Bank", "hours": 2.5, "date": "2026-03-25", "email": "Aleli_Pantaleon@sats.com.sg", "location": ""}, {"id": "V2026_63", "name": "JAYARAMAN S /O MURUGESAN", "bu": "SG Hub", "activity": "FFTH", "hours": 2.5, "date": "2026-03-18", "email": "Ram.jay62@yahoo.com", "location": ""}, {"id": "V2026_64", "name": "Chee Chin Thiam", "bu": "Gateway Services", "activity": "FFTH", "hours": 2.5, "date": "2026-03-18", "email": "Lionel_cheect@sats.com.sg", "location": ""}, {"id": "V2026_65", "name": "Liew Choon Monh", "bu": "SG Hub", "activity": "FFTH", "hours": 2.5, "date": "2026-03-18", "email": "Joe_Liew@sats.com.sg", "location": ""}, {"id": "V2026_66", "name": "John ONG Chuan Huat", "bu": "SATS Management", "activity": "FFTH", "hours": 2.5, "date": "2026-03-18", "email": "Chuanhuat_ong@sats.com.sg", "location": ""}, {"id": "V2026_67", "name": "MARY GRACE NAZARENO", "bu": "Technology", "activity": "FFTH", "hours": 2.5, "date": "2026-03-18", "email": "marygrace_nazareno@sats.com.sg", "location": ""}, {"id": "V2026_68", "name": "KumFong Tsao", "bu": "Food Solutions", "activity": "FFTH", "hours": 2.5, "date": "2026-03-18", "email": "Kumfong_tsao@sats.com.sg", "location": ""}, {"id": "V2026_69", "name": "Brenda Lim", "bu": "Technology", "activity": "FFTH", "hours": 2.5, "date": "2026-03-18", "email": "Geokbuay_lim@sats.com.sg", "location": ""}, {"id": "V2026_70", "name": "BeeHwee Lim", "bu": "Food Solutions", "activity": "FFTH", "hours": 2.5, "date": "2026-03-18", "email": "Ops_cch@sats.com.sg", "location": ""}, {"id": "V2026_71", "name": "Ong Lai Hoe", "bu": "SG Hub", "activity": "FFTH", "hours": 2.5, "date": "2026-03-18", "email": "Laihoe_ong@sats.com.sg", "location": ""}, {"id": "V2026_72", "name": "Kaymiang Teo", "bu": "SG Hub", "activity": "FFTH", "hours": 2.5, "date": "2026-03-18", "email": "kaymiang_teo@sats.com.sg", "location": ""}, {"id": "V2026_73", "name": "Khengjoo Tan", "bu": "SG Hub", "activity": "FFTH", "hours": 2.5, "date": "2026-03-18", "email": "Khengjoo_tan@sats.com.sg", "location": ""}, {"id": "V2026_74", "name": "Liow Lay Choo", "bu": "Food Solutions", "activity": "FFTH", "hours": 2.5, "date": "2026-03-18", "email": "Laychoo_liow@sats.com.sg", "location": ""}, {"id": "V2026_75", "name": "Jessica Dogaojo", "bu": "Marketing", "activity": "FFTH", "hours": 2.5, "date": "2026-03-18", "email": "jessica_dogaojo@sats.com.sg", "location": ""}, {"id": "V2026_76", "name": "Tan Li Hin", "bu": "Food Solutions", "activity": "FFTH", "hours": 2.5, "date": "2026-03-18", "email": "Lihin_Tan@sats.com.sg", "location": ""}];
+
+// Deduplicate and build name→records map
+const byName = {};
+ALL_RECORDS.forEach(r => {
+  const key = r.name.trim();
+  if (!byName[key]) byName[key] = [];
+  byName[key].push(r);
+});
+
+const ALL_NAMES = Object.keys(byName).sort((a,b) => a.localeCompare(b));
+
+// Total hours for ranking
+const personTotals = {};
+ALL_NAMES.forEach(n => {
+  personTotals[n] = byName[n].reduce((s,r) => s + r.hours, 0);
+});
+const rankList = Object.entries(personTotals).sort((a,b) => b[1]-a[1]);
+
+// Impact multipliers per activity
+const ACTIVITY_META = {
+  'FFTH':           { label:'Food From The Heart', icon:'🍱', cls:'ffth', impact:'meals packed', mult:8, color:'var(--teal)' },
+  'Comchest Fudai': { label:'Comchest Fudai',       icon:'🤝', cls:'cf',   impact:'families supported', mult:5, color:'#e07b00' },
+  'Food Bank':      { label:'Food Bank Singapore',  icon:'📦', cls:'fb',   impact:'kg of food rescued', mult:10, color:'#2563eb' },
+};
+function getMeta(activity) {
+  return ACTIVITY_META[activity] || { label:activity, icon:'⭐', cls:'other', impact:'people helped', mult:4, color:'var(--teal)' };
+}
+
+// ── SEARCH AUTOCOMPLETE ──
+let focusedSug = -1;
+
+function onNameInput(val) {
+  const sug = document.getElementById('suggestions');
+  document.getElementById('login-error').style.display = 'none';
+  focusedSug = -1;
+  if (!val.trim()) { sug.classList.remove('show'); return; }
+  const q = val.toLowerCase();
+  const matches = ALL_NAMES.filter(n => n.toLowerCase().includes(q)).slice(0, 7);
+  if (!matches.length) { sug.classList.remove('show'); return; }
+  sug.innerHTML = matches.map((n,i) => {
+    const rec = byName[n][0];
+    const initials = n.split(' ').map(x=>x[0]).filter(Boolean).slice(0,2).join('');
+    return `<div class="sug-item" data-name="${n}" onclick="selectName('${n.replace(/'/g,"\'")}')">
+      <div class="sug-avatar">${initials}</div>
+      <div><div class="sug-name">${n}</div><div class="sug-bu">${rec.bu}</div></div>
+    </div>`;
+  }).join('');
+  sug.classList.add('show');
+}
+
+function onKeyDown(e) {
+  const items = document.querySelectorAll('.sug-item');
+  if (e.key === 'ArrowDown') { focusedSug = Math.min(focusedSug+1, items.length-1); highlightSug(items); e.preventDefault(); }
+  else if (e.key === 'ArrowUp') { focusedSug = Math.max(focusedSug-1, -1); highlightSug(items); e.preventDefault(); }
+  else if (e.key === 'Enter') {
+    if (focusedSug >= 0 && items[focusedSug]) { selectName(items[focusedSug].dataset.name); }
+    else doLogin();
+  }
+  else if (e.key === 'Escape') { document.getElementById('suggestions').classList.remove('show'); }
+}
+
+function highlightSug(items) {
+  items.forEach((it,i) => it.classList.toggle('focused', i === focusedSug));
+  if (focusedSug >= 0) items[focusedSug].scrollIntoView({block:'nearest'});
+}
+
+function selectName(name) {
+  document.getElementById('name-input').value = name;
+  document.getElementById('suggestions').classList.remove('show');
+}
+
+// Close suggestions on outside click
+document.addEventListener('click', e => {
+  if (!e.target.closest('.search-wrap')) document.getElementById('suggestions').classList.remove('show');
+});
+
+// ── LOGIN ──
+function doLogin() {
+  const raw = document.getElementById('name-input').value.trim();
+  // Fuzzy match: exact first, then case-insensitive
+  let matched = byName[raw] ? raw : ALL_NAMES.find(n => n.toLowerCase() === raw.toLowerCase());
+  if (!matched) {
+    document.getElementById('login-error').style.display = 'block';
+    return;
+  }
+  renderPassport(matched);
+  document.getElementById('login-screen').style.display = 'none';
+  document.getElementById('passport-screen').style.display = 'block';
+  window.scrollTo(0,0);
+}
+
+function doLogout() {
+  document.getElementById('login-screen').style.display = 'flex';
+  document.getElementById('passport-screen').style.display = 'none';
+  document.getElementById('name-input').value = '';
+  document.getElementById('login-error').style.display = 'none';
+}
+
+// ── RENDER PASSPORT ──
+function renderPassport(name) {
+  const records = byName[name];
+  const totalHrs = records.reduce((s,r) => s+r.hours, 0);
+  const sessions = records.length;
+  const activities = [...new Set(records.map(r=>r.activity))];
+  const bu = records[0].bu;
+  const totalAllHrs = 219.5;
+
+  // Header
+  document.getElementById('pp-name').textContent = name;
+  document.getElementById('pp-bu').textContent = bu + ' · SATS Staff Association';
+  document.getElementById('pp-hours').textContent = totalHrs;
+  document.getElementById('pp-sessions').textContent = sessions;
+  document.getElementById('pp-activities').textContent = activities.length;
+
+  // Rank
+  const rankIdx = rankList.findIndex(([n]) => n === name);
+  const rankNum = rankIdx + 1;
+  const total = rankList.length;
+  let medal = '🏅';
+  if (rankNum === 1) medal = '🥇';
+  else if (rankNum === 2) medal = '🥈';
+  else if (rankNum === 3) medal = '🥉';
+  document.getElementById('rank-medal').textContent = medal;
+  const ordinal = n => n===1?'1st':n===2?'2nd':n===3?'3rd':`${n}th`;
+  document.getElementById('rank-pos').textContent = `${ordinal(rankNum)} out of ${total} volunteers`;
+  const topPct = Math.round((1 - rankIdx/total)*100);
+  document.getElementById('rank-detail').textContent = `You're in the top ${topPct}% of SSA volunteers this year`;
+
+  // Community %
+  const myPct = Math.round(totalHrs / totalAllHrs * 100);
+  document.getElementById('pp-pct').textContent = myPct + '%';
+  document.getElementById('pp-community-line').textContent = `Together we've given ${totalAllHrs} hours to the community`;
+  document.getElementById('pp-community-sub').textContent = `You personally contributed ${myPct}% of all volunteer hours — that's ${totalHrs} hours of genuine impact.`;
+
+  // Impact cards — group by activity
+  const actMap = {};
+  records.forEach(r => {
+    actMap[r.activity] = (actMap[r.activity] || 0) + r.hours;
+  });
+  const maxHrsForBar = Math.max(...Object.values(actMap));
+  const impactEl = document.getElementById('impact-cards');
+  impactEl.innerHTML = Object.entries(actMap).map(([act, hrs], idx) => {
+    const meta = getMeta(act);
+    const impactNum = Math.round(hrs * meta.mult);
+    const pct = Math.round(hrs / maxHrsForBar * 100);
+    return `<div class="impact-card" style="animation-delay:${idx*0.1}s">
+      <div class="impact-icon ${meta.cls}">${meta.icon}</div>
+      <div class="impact-body">
+        <div class="impact-activity">${meta.label}</div>
+        <div class="impact-desc">${hrs} hrs volunteered</div>
+        <div>
+          <span class="impact-number" style="color:${meta.color}">${impactNum}</span>
+          <span class="impact-unit">${meta.impact}</span>
+        </div>
+        <div class="hours-progress">
+          <div class="hours-progress-fill" style="width:0%" data-target="${pct}"></div>
+        </div>
+      </div>
+    </div>`;
+  }).join('');
+
+  // Animate progress bars after paint
+  requestAnimationFrame(() => {
+    document.querySelectorAll('.hours-progress-fill').forEach(el => {
+      el.style.width = el.dataset.target + '%';
+    });
+  });
+
+  // Timeline
+  const sorted = [...records].sort((a,b) => b.date.localeCompare(a.date));
+  const tlEl = document.getElementById('pp-timeline');
+  tlEl.innerHTML = sorted.map((r, idx) => {
+    const meta = getMeta(r.activity);
+    const dateStr = r.date ? new Date(r.date+'T00:00:00').toLocaleDateString('en-SG',{day:'numeric',month:'short',year:'numeric'}) : '—';
+    return `<div class="timeline-item" style="animation-delay:${idx*0.08}s">
+      <div class="tl-top">
+        <div class="tl-activity">${meta.icon} ${meta.label}</div>
+        <div class="tl-hrs">${r.hours} hrs</div>
+      </div>
+      <div class="tl-date">📅 ${dateStr} · ${r.bu}</div>
+    </div>`;
+  }).join('');
+}
+</script>
+</body>
+</html>
